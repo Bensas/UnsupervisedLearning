@@ -1,7 +1,7 @@
 import numpy as np
 class Kohonen():
   def __init__(self, dimension, data, learning_rate):
-    self.neurons = np.zeros((dimension, dimension, data.shape[1]))
+    self.neurons = np.random.uniform(low=-1, high=1, size=(dimension, dimension, data.shape[1]))
     self.learning_rate = learning_rate
     self.dimension = dimension
   
@@ -16,33 +16,27 @@ class Kohonen():
           min_dist_neuron = (ix, iy)
     return min_dist_neuron
   
-  def get_neighbor_neurons(self, neuron):
+  def get_neighbor_neurons(self, neuron, distance):
     result = []
-    neuron_x = neuron[0]
-    neuron_y = neuron[1]
-    #up
-    if neuron_exists(neuron_x, neuron_y-1):
-      result.append((neuron_x, neuron_y-1))
-    #right
-    if neuron_exists(neuron_x+1, neuron_y):
-      result.append((neuron_x+1, neuron_y))
-    #bottom
-    if neuron_exists(neuron_x, neuron_y+1):
-      result.append((neuron_x, neuron_y+1))
-    #left
-    if neuron_exists(neuron_x-1, neuron_y):
-      result.append((neuron_x-1, neuron_y))
+    for ix in range(self.dimension):
+      for iy in range(self.dimension):
+        if neuron != (ix, iy) and self.dist(neuron, (ix, iy)) <= min_dist:
+          result.append((ix, iy))
     return result
   
-  def neuron_exists(neuron):
-    return neuron[0] < self.dimensions && neuron[0] >= 0
-          && neuron[1] < self.dimensions && neuron[1] >= 0
+  def dist(self, X1, X2):
+    return ((X2[0]-X1[0])**2 + (X2[1]-X1[1])**2)**(1/2)
+  
+  def neuron_exists(self, neuron):
+    return neuron[0] < self.dimensions and neuron[0] >= 0 and neuron[1] < self.dimensions and neuron[1] >= 0
 
 
-  def train(self, data, epochs=1000, learning_rate_decay=0.):
+  def train(self, data, epochs=1000, learning_rate_decay=0):
     for _ in range(epochs):
       for point in data:
         closest_neuron = self.get_closest_neuron(point)
+        closest_neuron_weights = self.neurons[closest_neuron[1], closest_neuron[0]]
         neighbor_neurons = self.get_neighbor_neurons(closest_neuron)
-        # self.learning_rate = self.learning_rate - learning_rate_decay 
-     
+        for neuron in neighbor_neurons:
+          self.neurons[neuron[1], neuron[0]] += self.learning_rate * (closest_neuron_weights - self.neurons[neuron[1], neuron[0]])
+        self.learning_rate = self.learning_rate - learning_rate_decay 
