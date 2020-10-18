@@ -1,6 +1,7 @@
 import pandas as pd
 
 from kohonen import Kohonen
+from hopfield import Hopfield
 
 command = input("Select the desired excercise:")
 
@@ -27,9 +28,16 @@ if command == "1a":
   }
   for country_name, country_weights in zip(country_names, data):
     lists[str(kohonen_net.get_closest_neuron(country_weights))].append(country_name)
-    print(country_name + " ---> " + str(kohonen_net.get_closest_neuron(country_weights)))
   for key in lists:
     print("Countries in " + key + ": ")
     for country in lists[key]:
       print(country)
   print("Exiting.")
+
+elif command == "2":
+  print("Loading data...")
+  raw_data = pd.read_csv("letters-flattened.csv")
+  data = raw_data.to_numpy()
+  hopfield_net = Hopfield(data)
+  hopfield_net.train(data)
+  
