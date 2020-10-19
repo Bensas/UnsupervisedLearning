@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import math
 import time     
+import matplotlib.pyplot as plt
 from numpy import linalg
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
@@ -37,9 +38,10 @@ class red_neuronal_with_oja(): #perceptron simple
 
 def ej1_b():
 
+    features = ['Area','GPD','Inflation','Life.expect', 'Military', 'Pop.growth', 'Unemployment']
     europe_csv = pd.read_csv('europe.csv', names=['Country','Area','GPD','Inflation','Life.expect', 'Military', 'Pop.growth', 'Unemployment'])
     europe_csv = europe_csv.drop([0]) #saco la primer fila de nombres ya que no la quiero en la matriz de datos
-    # countries = europe_csv.loc[:, 'Country'] #separo valores para trabajr mas facil luego, en registros y variables.
+    countries = europe_csv.loc[:, 'Country'] #separo valores para trabajr mas facil luego, en registros y variables.
     values = europe_csv.loc[1:, ['Area','GPD','Inflation','Life.expect', 'Military', 'Pop.growth', 'Unemployment']].values.astype(np.float)
     
     print("Raw Values: \n")
@@ -60,24 +62,48 @@ def ej1_b():
     # With PCA
 
     print("\n\n\n WITH PCA \n\n\n")
+
     start = time.time()
-    feat_cols = ['feature'+str(i) for i in range(values_normalized.shape[1])]
+
+    feat_cols = [features[i] for i in range(values_normalized.shape[1])]
     normalised_values = pd.DataFrame(values_normalized,columns=feat_cols)
-    normalised_values.tail()
+    # print(normalised_values)
     pca = PCA(n_components=2)
     principalComponents = pca.fit_transform(values_normalized)
     principal_Df = pd.DataFrame(data = principalComponents, columns = ['principal component 1', 'principal component 2'])
-    principal_Df.tail()
+
     end = time.time()
 
+    print(principal_Df)
+    print("\n\n")
+    print('Explained variation per principal component: {}'.format(pca.explained_variance_ratio_))
+
+    # plt.figure()
+    # plt.figure(figsize=(10,10))
+    # plt.xticks(fontsize=12)
+    # plt.yticks(fontsize=14)
+    # plt.xlabel('Principal Component - 1',fontsize=20)
+    # plt.ylabel('Principal Component - 2',fontsize=20)
+    # plt.title("Principal Component Analysis of Europe Dataset",fontsize=20)
+    # for target in zip(countries):
+    #     indicesToKeep = europe_csv['Country'] == target
+
+    # FALLA ES LA LINEA 93!!!!!!!!!!!!!
+
+    #     plt.scatter(principal_Df.loc[indicesToKeep, 'principal component 1'], principal_Df.loc[indicesToKeep, 'principal component 2'], c = 'r', s = 50)
+
+    # plt.legend(countries,prop={'size': 15})
+
     #With Oja's rule
+
+    print("\n\n\n WITH OJA'S RULE \n\n\n")
 
     epochs = 1000
     oja = red_neuronal_with_oja(values_normalized[0].size, values_normalized, epochs)
     start2 = time.time()
     oja.train()
     end2 = time.time()
-    print(oja)
+    print(oja.weights)
 
     if (end-start) > (end2-start2):
         print("Oja's rule was more efficient")
@@ -87,3 +113,4 @@ def ej1_b():
 
 if __name__ == '__main__':
     ej1_b()
+    
