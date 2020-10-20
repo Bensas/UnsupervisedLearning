@@ -18,6 +18,8 @@ if command == "1a":
 
   print("Data loaded and normalized. Training net...")
   kohonen_net = Kohonen(dimension=2, data=data, learning_rate=0.001)
+  kohonen_net.train(data=data)
+  print(kohonen_net.neurons)
 
   print("Net trained, obtaining results:")
   lists = {

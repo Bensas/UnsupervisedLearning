@@ -2,7 +2,7 @@ import numpy as np
 class Kohonen():
   def __init__(self, dimension, data, learning_rate):
     self.neurons = np.random.uniform(low=-1, high=1, size=(dimension, dimension, data.shape[1]))
-    self.learning_rate = learning_rate
+    self.initial_learning_rate = learning_rate
     self.dimension = dimension
   
   def get_closest_neuron(self, point):
@@ -20,7 +20,7 @@ class Kohonen():
     result = []
     for ix in range(self.dimension):
       for iy in range(self.dimension):
-        if neuron != (ix, iy) and self.dist(neuron, (ix, iy)) <= min_dist:
+        if neuron != (ix, iy) and self.dist(neuron, (ix, iy)) <= distance:
           result.append((ix, iy))
     return result
   
@@ -28,15 +28,16 @@ class Kohonen():
     return ((X2[0]-X1[0])**2 + (X2[1]-X1[1])**2)**(1/2)
   
   def neuron_exists(self, neuron):
-    return neuron[0] < self.dimensions and neuron[0] >= 0 and neuron[1] < self.dimensions and neuron[1] >= 0
+    return neuron[0] < self.dimension and neuron[0] >= 0 and neuron[1] < self.dimension and neuron[1] >= 0
 
-
-  def train(self, data, epochs=1000, learning_rate_decay=0):
+  def train(self, data, epochs=1000):
     for _ in range(epochs):
-      for point in data:
+      learning_rate = self.initial_learning_rate 
+      for index, point in enumerate(data):
         closest_neuron = self.get_closest_neuron(point)
         closest_neuron_weights = self.neurons[closest_neuron[1], closest_neuron[0]]
-        neighbor_neurons = self.get_neighbor_neurons(closest_neuron)
+        neighbor_neurons = self.get_neighbor_neurons(closest_neuron, 1)
         for neuron in neighbor_neurons:
-          self.neurons[neuron[1], neuron[0]] += self.learning_rate * (closest_neuron_weights - self.neurons[neuron[1], neuron[0]])
-        self.learning_rate = self.learning_rate - learning_rate_decay 
+          self.neurons[neuron[1], neuron[0]] += learning_rate * (closest_neuron_weights - self.neurons[neuron[1], neuron[0]])
+        learning_rate = learning_rate / (index+1)
+
