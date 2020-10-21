@@ -43,7 +43,7 @@ if command == "1a":
   
   for i in range(len(neuron_countries)):
     for j in range(len(neuron_countries[0])):
-      plt.text(i, j, neuron_countries[i][j]);
+      plt.text(i, j, neuron_countries[i][j])
   plt.xlim(0, len(neuron_countries)*1.2)
   plt.ylim(0, len(neuron_countries)*1.2)
   plt.show()
@@ -58,8 +58,8 @@ elif command == "2":
   data = raw_data.to_numpy()
   hopfield_net = Hopfield(data)
   hopfield_net.train(data)
-
-  test_patterns, expected_result_indexes = Hopfield.machine_of_patterns(data, 0.2, 50)
+#LEE EL COMENTARIO JUAN -------------------------------------------------------------->
+  test_patterns, expected_result_indexes = Hopfield.machine_of_patterns(data, 0.2, 50) #los dos ultimos argumentos van al reves, el ultimo es la probabilidad y el ante ultimo la cant de nuevos patterns
   for index, pattern in enumerate(test_patterns):
     stabilized_pattern = hop
   
