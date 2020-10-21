@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+
 class Kohonen():
   def __init__(self, dimension, data, learning_rate):
     self.neurons = np.random.uniform(low=-1, high=1, size=(dimension, dimension, data.shape[1]))
@@ -24,6 +26,20 @@ class Kohonen():
           result.append((ix, iy))
     return result
   
+  #This function returns a matrix with the average distance form each neuron to al its neighbors
+  def get_average_distances(self, neighbor_distance):
+    average_distances = np.zeros((self.dimension, self.dimension))
+    for ix in range(self.dimension):
+      for iy in range(self.dimension):
+        current_neuron = self.neurons[iy, ix]
+        neighbor_neurons = self.get_neighbor_neurons(current_neuron, neighbor_distance)
+        dist_sum = 0
+        for neighbor_neuron in neighbor_neurons:
+          neighbor = self.neurons[neighbor_neuron[1], neighbor_neuron[0]]
+          dist_sum += np.linalg.norm(neighbor - current_neuron)
+        average_distances[iy, ix] = dist_sum/len(neighbor_neurons)
+    return average_distances
+
   def dist(self, X1, X2):
     return ((X2[0]-X1[0])**2 + (X2[1]-X1[1])**2)**(1/2)
   
@@ -40,4 +56,11 @@ class Kohonen():
         for neuron in neighbor_neurons:
           self.neurons[neuron[1], neuron[0]] += learning_rate * (closest_neuron_weights - self.neurons[neuron[1], neuron[0]])
         learning_rate = learning_rate / (index+1)
-
+  
+  #Plotting
+  def plot_average_distances(self, colormap='Blues', internal=False):
+    neuron_average_distances = self.get_average_distances(neighbor_distance=1)
+    plt.pcolormesh(neuron_average_distances, cmap=colormap, edgecolors=None)
+    plt.colorbar()
+    plt.title("Average Distance to Neighbors", fontsize=25)
+    plt.show()

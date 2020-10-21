@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from kohonen import Kohonen
 from hopfield import Hopfield
@@ -13,13 +14,13 @@ if command == "1a":
   raw_data = raw_data.drop(columns="Country")
   data_normalized = (raw_data - raw_data.mean()) / raw_data.std()
   data = data_normalized.to_numpy()
-  for row in data:
-    print(row)
+  # for row in data:
+  #   print(row)
 
   print("Data loaded and normalized. Training net...")
   kohonen_net = Kohonen(dimension=2, data=data, learning_rate=0.001)
   kohonen_net.train(data=data)
-  print(kohonen_net.neurons)
+  # print(kohonen_net.neurons)
 
   print("Net trained, obtaining results:")
   lists = {
@@ -34,6 +35,7 @@ if command == "1a":
     print("Countries in " + key + ": ")
     for country in lists[key]:
       print(country)
+  kohonen_net.plot_average_distances()
   print("Exiting.")
 
 elif command == "2":
