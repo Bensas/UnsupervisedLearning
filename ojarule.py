@@ -6,9 +6,7 @@ import time
 import scipy.linalg as la
 import matplotlib.pyplot as plt
 from numpy import linalg
-from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import normalize
 
 class red_neuronal_with_oja(): #perceptron simple
@@ -54,21 +52,16 @@ def ej1_b():
     mean_cero = non_categoric - (ones * means)
     
     values_normalized = normalize(mean_cero, axis=0)
-    
-    # METODO PARA NORMALIZAR ALTERNATIVO DUDOSO
-    # scalar = MinMaxScaler(feature_range=(-1,1))
-    # scalar.fit(values)
-    # values_normalized = scalar.transform(values)
 
     print("Normalized Values: \n")
     print(values_normalized)
 
-    # Let's check whether the normalized data has a mean of zero and a standard deviation of one.
+    # Let's check whether the normalized data has a mean of zero and a standard deviation lower than one.
 
-    # print("Mean: \n")
-    # print(np.mean(values_normalized))
-    # print("Standard deviation: \n")
-    # print(np.std(values_normalized))
+    print("Mean: \n")
+    print(np.mean(values_normalized))
+    print("Standard deviation: \n")
+    print(np.std(values_normalized))
 
     # With PCA
 
@@ -130,9 +123,9 @@ def ej1_b():
     plt.show()
 
     if (end-start) > (end2-start2):
-        print("Oja's rule was more efficient")
+        print("\n\nOja's rule was more efficient")
     else:
-        print("PCA was more efficient")
+        print("\n\nPCA was more efficient")
 
 
 if __name__ == '__main__':

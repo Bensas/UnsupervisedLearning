@@ -1,4 +1,14 @@
 import numpy as np
+from random import random
+from random import randint
+
+def what(self, number):
+    if(number > 0):
+      return 1
+    elif (number < 0):
+      return -1
+    else:
+      return 0
 
 class Hopfield():
   def __init__(self, data):
@@ -25,9 +35,31 @@ class Hopfield():
             sum = 0
             for j in range(self.dimension):
                 sum += self.weights[i,j] * prev_pattern[j]
-            curr_pattern[i] = sign(sum)
+            curr_pattern[i] = what(self, sum)
 
         if (t > 1 and (prev_prev_pattern == curr_pattern).all()):
             break
 
     return curr_pattern
+  
+  def machine_of_patterns(self, data, prob_of_mutation, n_patterns):
+    #how many letters do we have
+    amount_of_letters = data.shape[0]
+    #length of an array of one letter
+    length_of_letters = data.shape[1]
+    #book = is all the new letters or patterns
+    book = np.zeros((n_patterns, length_of_letters))
+    #book_result = is what the new letters should be after evaluation
+    book_result = np.zeros(n_patterns)
+    for index in range(n_patterns):
+        #letter to modify random
+        chosen_letter = randint(0,amount_of_letters - 1)
+        #We save the correct letter in the book of results
+        book_result[index] = chosen_letter
+        #We copy the letter also in the book that will later be modify
+        book[index,:] = data[chosen_letter,:]
+        for index2 in range(length_of_letters):
+            #each number inside a letter has a chance of being modify
+            if(random() < prob_of_mutation):
+                book[index, index2] = book[index, index2] * (-1)
+    return book, book_result
