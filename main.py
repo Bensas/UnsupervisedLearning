@@ -1,8 +1,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 from kohonen import Kohonen
 from hopfield import Hopfield
+
+def custom_fmt(spec):
+  return 'Countries'
 
 command = input("Select the desired excercise:")
 
@@ -23,19 +27,20 @@ if command == "1a":
   # print(kohonen_net.neurons)
 
   print("Net trained, obtaining results:")
-  lists = {
-    "(0, 0)": [],
-    "(0, 1)": [],
-    "(1, 0)": [],
-    "(1, 1)": []
-  }
+  
+  neuron_countries = []
+  for i in range(2):
+    row = []
+    for j in range(2):
+      row.append('')
+    neuron_countries.append(row)
+
   for country_name, country_weights in zip(country_names, data):
-    lists[str(kohonen_net.get_closest_neuron(country_weights))].append(country_name)
-  for key in lists:
-    print("Countries in " + key + ": ")
-    for country in lists[key]:
-      print(country)
-  kohonen_net.plot_average_distances()
+    neuron = kohonen_net.get_closest_neuron(country_weights)
+    neuron_countries[neuron[1]][neuron[0]] += country_name + '\n'
+  print(neuron_countries)
+  # kohonen_net.plot_average_distances()
+  kohonen_net.plot_average_distances_with_countries(neuron_countries=neuron_countries)
   print("Exiting.")
 
 elif command == "2":

@@ -121,6 +121,14 @@ def ej1_b():
     oja_Df = pd.DataFrame(data = oja.weights.T, columns = ['Principal component 1'])
     print(oja_Df)
 
+    country_values = np.dot(values_normalized, oja.weights)
+
+    countries = np.array(countries)
+    for index, value in enumerate(country_values):
+        plt.plot(value, 0, 'x')
+        plt.text(value, 0, countries[index], rotation=90)
+    plt.show()
+
     if (end-start) > (end2-start2):
         print("Oja's rule was more efficient")
     else:

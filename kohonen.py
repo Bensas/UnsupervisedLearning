@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns;
 
 class Kohonen():
   def __init__(self, dimension, data, learning_rate):
@@ -60,7 +61,14 @@ class Kohonen():
   #Plotting
   def plot_average_distances(self, colormap='Blues', internal=False):
     neuron_average_distances = self.get_average_distances(neighbor_distance=1)
-    plt.pcolormesh(neuron_average_distances, cmap=colormap, edgecolors=None)
-    plt.colorbar()
+    ax = sns.heatmap(neuron_average_distances, cmap=colormap, annot=True)
+
+    plt.title("Average Distance to Neighbors", fontsize=25)
+    plt.show()
+  
+  def plot_average_distances_with_countries(self, neuron_countries, colormap='Blues', internal=False):
+    neuron_average_distances = self.get_average_distances(neighbor_distance=1)
+    akws = {"ha": 'left',"va": 'top'}
+    ax = sns.heatmap(neuron_average_distances, cmap=colormap, annot=neuron_countries, annot_kws=akws, fmt="s")
     plt.title("Average Distance to Neighbors", fontsize=25)
     plt.show()
