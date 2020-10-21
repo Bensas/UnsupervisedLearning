@@ -81,15 +81,15 @@ def ej1_b():
     # print(normalised_values)
 
     eigenvalues, eigenvectors = np.linalg.eig(np.cov(values_normalized.T))
-    print(eigenvalues)
+    # print(eigenvalues)
 
-    # pca = PCA(n_components=1)
-    # principalComponents = pca.fit_transform(values_normalized.T)
-    # principal_Df = pd.DataFrame(data = principalComponents, columns = ['principal component 1'])
+    pca = PCA(n_components=1)
+    principalComponents = pca.fit_transform(values_normalized)
+    principal_Df = pd.DataFrame(data = pca.components_.T, columns = ['Principal component 1'])
 
     end = time.time()
 
-    # print(principal_Df)
+    print(principal_Df)
     # print("\n\n")
     # print('Explained variation per principal component: {}'.format(pca.explained_variance_ratio_))
 
@@ -118,7 +118,8 @@ def ej1_b():
     start2 = time.time()
     oja.train()
     end2 = time.time()
-    print(oja.weights)
+    oja_Df = pd.DataFrame(data = oja.weights.T, columns = ['Principal component 1'])
+    print(oja_Df)
 
     if (end-start) > (end2-start2):
         print("Oja's rule was more efficient")
