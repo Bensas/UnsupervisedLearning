@@ -21,7 +21,6 @@ class Hopfield():
         for j in range(self.dimension):
           if i != j:
             self.weights[i, j] += (1/self.dimension) * (input_elem[i] * input_elem[j])
-    print(self.weights)
   
   def stabilize_pattern(self, pattern, epochs=1000):
     curr_pattern = pattern

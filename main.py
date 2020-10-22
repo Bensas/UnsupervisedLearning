@@ -60,7 +60,7 @@ elif command == "2":
   hopfield_net = Hopfield(data)
   hopfield_net.train(data)
 
-  test_patterns, expected_result_indexes = Hopfield.machine_of_patterns(data, 0.3, HOPFIELD_NUM_OF_TEST_PATTERNS)
+  test_patterns, expected_result_indexes = Hopfield.machine_of_patterns(data, 0.2, HOPFIELD_NUM_OF_TEST_PATTERNS)
   correct_results = 0
   for index, pattern in enumerate(test_patterns):
     stabilized_pattern = hopfield_net.stabilize_pattern(pattern)
