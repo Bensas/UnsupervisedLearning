@@ -1,11 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns;
+import math
 
 class Kohonen():
-  def __init__(self, dimension, data, learning_rate):
+  def __init__(self, dimension, data, learning_rate, initial_radius):
     self.neurons = np.random.uniform(low=-1, high=1, size=(dimension, dimension, data.shape[1]))
     self.initial_learning_rate = learning_rate
+    self.initial_radius = initial_radius
     self.dimension = dimension
   
   def get_closest_neuron(self, point):
@@ -47,21 +49,23 @@ class Kohonen():
   def neuron_exists(self, neuron):
     return neuron[0] < self.dimension and neuron[0] >= 0 and neuron[1] < self.dimension and neuron[1] >= 0
 
-  def train(self, data, epochs=1000):
-    for _ in range(epochs):
-      learning_rate = self.initial_learning_rate 
-      for index, point in enumerate(data):
+  def train(self, data, epochs=100, decay_lambda=1):
+    learning_rate = self.initial_learning_rate 
+    neighborhood_radius = self.initial_radius
+    for t in range(epochs):
+      for point in data:
         closest_neuron = self.get_closest_neuron(point)
         closest_neuron_weights = self.neurons[closest_neuron[1], closest_neuron[0]]
-        neighbor_neurons = self.get_neighbor_neurons(closest_neuron, 1)
+        neighbor_neurons = self.get_neighbor_neurons(closest_neuron, neighborhood_radius)
         for neuron in neighbor_neurons:
           self.neurons[neuron[1], neuron[0]] += learning_rate * (closest_neuron_weights - self.neurons[neuron[1], neuron[0]])
-        learning_rate = learning_rate / (index+1)
+        learning_rate = self.initial_learning_rate * math.exp(-t / decay_lambda)
+        neighborhood_radius = self.initial_radius * math.exp(-t / decay_lambda)
   
   #Plotting
   def plot_average_distances(self, colormap='Blues', internal=False):
     neuron_average_distances = self.get_average_distances(neighbor_distance=1)
-    ax = sns.heatmap(neuron_average_distances, cmap=colormap, annot=True)
+    ax = sns.heatmap(neuron_average_distances, cmap=colormap)
 
     plt.title("Average Distance to Neighbors", fontsize=25)
     plt.show()
@@ -69,6 +73,9 @@ class Kohonen():
   def plot_average_distances_with_countries(self, neuron_countries, colormap='Blues', internal=False):
     neuron_average_distances = self.get_average_distances(neighbor_distance=1)
     akws = {"ha": "left","va": "top"}
-    ax = sns.heatmap(neuron_average_distances, cmap=colormap, annot=neuron_countries, annot_kws=akws, fmt="s")
+    ax = sns.heatmap(neuron_average_distances, cmap=colormap, annot_kws=akws, fmt="s")
+    # for i in range(len(neuron_countries)):
+    #   for j in range(len(neuron_countries[0])):
+    #     plt.text(i, j, neuron_countries[i][j])
     plt.title("Average Distance to Neighbors", fontsize=25)
     plt.show()
