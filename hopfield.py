@@ -2,6 +2,18 @@ import numpy as np
 from random import random
 from random import randint
 
+def print_in_terminal(pattern):
+    index = 0
+    for number in pattern:
+        if index % 5 == 0:
+            print()
+        if number == 1:
+            print('1', end='')
+        else:
+            print(' ', end='')
+        index += 1
+    print()
+
 def what(self, number):
     if(number > 0):
       return 1
@@ -27,6 +39,9 @@ class Hopfield():
     prev_pattern = np.array(curr_pattern)
     prev_prev_pattern = np.array(curr_pattern)
 
+    # print("\nPatron creado aleatoriamente:\n")
+    # print_in_terminal(pattern)
+
     for t in range(epochs):
         prev_prev_pattern = np.array(prev_pattern)
         prev_pattern = np.array(curr_pattern)            
@@ -39,6 +54,8 @@ class Hopfield():
         if (t > 1 and (prev_prev_pattern == curr_pattern).all()):
             break
 
+    # print("\nPatron despues de evolucionar:\n")
+    # print_in_terminal(curr_pattern)
     return curr_pattern
   
   @classmethod
