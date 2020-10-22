@@ -69,10 +69,6 @@ def ej1_b():
 
     start = time.time()
 
-    # feat_cols = [features[i] for i in range(values_normalized.shape[1])]
-    # normalised_values = pd.DataFrame(values_normalized,columns=feat_cols)
-    # print(normalised_values)
-
     eigenvalues, eigenvectors = np.linalg.eig(np.cov(values_normalized.T))
     # print(eigenvalues)
 
@@ -83,24 +79,6 @@ def ej1_b():
     end = time.time()
 
     print(principal_Df)
-    # print("\n\n")
-    # print('Explained variation per principal component: {}'.format(pca.explained_variance_ratio_))
-
-    # plt.figure()
-    # plt.figure(figsize=(10,10))
-    # plt.xticks(fontsize=12)
-    # plt.yticks(fontsize=14)
-    # plt.xlabel('Principal Component - 1',fontsize=20)
-    # plt.ylabel('Principal Component - 2',fontsize=20)
-    # plt.title("Principal Component Analysis of Europe Dataset",fontsize=20)
-    # for target in zip(countries):
-    #     indicesToKeep = europe_csv['Country'] == target
-
-    # FALLA ES LA LINEA 93!!!!!!!!!!!!!
-
-    #     plt.scatter(principal_Df.loc[indicesToKeep, 'principal component 1'], principal_Df.loc[indicesToKeep, 'principal component 2'], c = 'r', s = 50)
-
-    # plt.legend(countries,prop={'size': 15})
 
     #With Oja's rule
 

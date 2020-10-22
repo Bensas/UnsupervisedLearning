@@ -44,7 +44,7 @@ if command == "1a":
   
   for i in range(len(neuron_countries)):
     for j in range(len(neuron_countries[0])):
-      plt.text(i, j, neuron_countries[i][j]);
+      plt.text(i, j, neuron_countries[i][j])
   plt.xlim(0, len(neuron_countries)*1.2)
   plt.ylim(0, len(neuron_countries)*1.2)
   plt.show()
