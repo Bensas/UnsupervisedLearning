@@ -23,7 +23,7 @@ class Hopfield():
             self.weights[i, j] += (1/self.dimension) * (input_elem[i] * input_elem[j])
     print(self.weights)
   
-  def stabilize_pattern(self, pattern, epochs):
+  def stabilize_pattern(self, pattern, epochs=1000):
     curr_pattern = pattern
     prev_pattern = np.array(curr_pattern)
     prev_prev_pattern = np.array(curr_pattern)
@@ -42,7 +42,8 @@ class Hopfield():
 
     return curr_pattern
   
-  def machine_of_patterns(self, data, prob_of_mutation, n_patterns):
+  @classmethod
+  def machine_of_patterns(cls, data, prob_of_mutation, n_patterns):
     #how many letters do we have
     amount_of_letters = data.shape[0]
     #length of an array of one letter
@@ -62,4 +63,4 @@ class Hopfield():
             #each number inside a letter has a chance of being modify
             if(random() < prob_of_mutation):
                 book[index, index2] = book[index, index2] * (-1)
-    return book, book_result
+    return book, book_result.astype(int)

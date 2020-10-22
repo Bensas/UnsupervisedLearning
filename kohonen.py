@@ -33,7 +33,7 @@ class Kohonen():
     for ix in range(self.dimension):
       for iy in range(self.dimension):
         current_neuron = self.neurons[iy, ix]
-        neighbor_neurons = self.get_neighbor_neurons(current_neuron, neighbor_distance)
+        neighbor_neurons = self.get_neighbor_neurons((ix, iy), neighbor_distance)
         dist_sum = 0
         for neighbor_neuron in neighbor_neurons:
           neighbor = self.neurons[neighbor_neuron[1], neighbor_neuron[0]]
@@ -68,7 +68,7 @@ class Kohonen():
   
   def plot_average_distances_with_countries(self, neuron_countries, colormap='Blues', internal=False):
     neuron_average_distances = self.get_average_distances(neighbor_distance=1)
-    akws = {"ha": 'left',"va": 'top'}
+    akws = {"ha": "left","va": "top"}
     ax = sns.heatmap(neuron_average_distances, cmap=colormap, annot=neuron_countries, annot_kws=akws, fmt="s")
     plt.title("Average Distance to Neighbors", fontsize=25)
     plt.show()
