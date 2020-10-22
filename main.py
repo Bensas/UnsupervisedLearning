@@ -4,8 +4,11 @@ import numpy as np
 
 from kohonen import Kohonen
 from hopfield import Hopfield
+from ojarule import ej1_b
 
-KOHONEN_DIMENSION = 4
+KOHONEN_DIMENSION = 8
+KOHONEN_INITIAL_RADIUS = 4
+
 HOPFIELD_NUM_OF_TEST_PATTERNS = 500
 
 def custom_fmt(spec):
@@ -21,11 +24,9 @@ if command == "1a":
   raw_data = raw_data.drop(columns="Country")
   data_normalized = (raw_data - raw_data.mean()) / raw_data.std()
   data = data_normalized.to_numpy()
-  # for row in data:
-  #   print(row)
 
   print("Data loaded and normalized. Training net...")
-  kohonen_net = Kohonen(dimension=KOHONEN_DIMENSION, data=data, learning_rate=0.001)
+  kohonen_net = Kohonen(dimension=KOHONEN_DIMENSION, data=data, learning_rate=0.5, initial_radius=KOHONEN_INITIAL_RADIUS)
   kohonen_net.train(data=data)
   # print(kohonen_net.neurons)
 
@@ -52,6 +53,9 @@ if command == "1a":
   # kohonen_net.plot_average_distances()
   kohonen_net.plot_average_distances_with_countries(neuron_countries=neuron_countries)
   print("Exiting.")
+
+elif command == "1b":
+  ej1_b()
 
 elif command == "2":
   print("Loading data...")
