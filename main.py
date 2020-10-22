@@ -14,6 +14,18 @@ HOPFIELD_NUM_OF_TEST_PATTERNS = 500
 def custom_fmt(spec):
   return 'Countries'
 
+def print_in_terminal(pattern):
+    index = 0
+    for number in pattern:
+        if index % 5 == 0:
+            print()
+        if number == 1:
+            print('1', end='')
+        else:
+            print(' ', end='')
+        index += 1
+    print()
+
 command = input("Select the desired excercise:")
 
 if command == "1a":
@@ -64,12 +76,14 @@ elif command == "2":
   hopfield_net = Hopfield(data)
   hopfield_net.train(data)
 
-  test_patterns, expected_result_indexes = Hopfield.machine_of_patterns(data, 0.2, HOPFIELD_NUM_OF_TEST_PATTERNS)
+  test_patterns, expected_result_indexes = Hopfield.machine_of_patterns(data, 1, HOPFIELD_NUM_OF_TEST_PATTERNS)
   correct_results = 0
   for index, pattern in enumerate(test_patterns):
     stabilized_pattern = hopfield_net.stabilize_pattern(pattern)
     if (data[expected_result_indexes[index]] == stabilized_pattern).all():
-      correct_results += 1;
+      correct_results += 1
+    # print("\nPatron esperado:\n")
+    # print_in_terminal(data[expected_result_indexes[index],:])
 
   print('Correct stabilizations: ' + str((correct_results / HOPFIELD_NUM_OF_TEST_PATTERNS) * 100) + '%')
 
